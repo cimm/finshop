@@ -1,12 +1,14 @@
 class Product
   attr_writer :available
+  attr_reader :updated_at
   attr_accessor :title, :url, :price
 
   def initialize(title:, price:, url:, available:)
-    @title     = title
-    @price     = price
-    @url       = url
-    @available = available
+    @title      = title
+    @price      = price
+    @url        = url
+    @available  = available
+    @updated_at = Time.now
   end
 
   def self.from_results(results)

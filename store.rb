@@ -29,4 +29,10 @@ class Store
       @store.commit
     end
   end
+
+  def since(time)
+    load.select do |record|
+      record.updated_at > time
+    end
+  end
 end
