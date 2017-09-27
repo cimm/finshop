@@ -15,7 +15,6 @@ class Store
 
   def upsert(records)
     stored_records = load
-    p stored_records.count
     stored_records.each do |stored_record|
       records.each do |record|
         stored_records.delete(stored_record) if record.equal?(stored_record)
