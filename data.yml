@@ -1,0 +1,27 @@
+---
+:data:
+- !ruby/object:Product
+  title: Lego - Star wars - 10188 - Death Star
+  price: 389.0
+  url: https://finshop.belgium.be/nl/online-shop/lego-star-wars-10188-death-star
+  available: false
+- !ruby/object:Product
+  title: Lego City 60019 - Stuntvliegtuig
+  price: 15.0
+  url: https://finshop.belgium.be/nl/online-shop/lego-city-60019-stuntvliegtuig
+  available: false
+- !ruby/object:Product
+  title: Lego City 7631 - Kiepwagen
+  price: 20.0
+  url: https://finshop.belgium.be/nl/online-shop/lego-city-7631-kiepwagen
+  available: false
+- !ruby/object:Product
+  title: Lego Ninjago 9443 - Masters of Spinjitzu
+  price: 40.0
+  url: https://finshop.belgium.be/nl/online-shop/lego-ninjago-9443-masters-spinjitzu
+  available: false
+- !ruby/object:Product
+  title: Hallo
+  price: 1
+  url: https://finshop.belgium.be/nl/online-shop/lego-technic-42020-helikopter
+  available: false
