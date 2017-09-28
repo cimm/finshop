@@ -13,5 +13,5 @@ store.upsert(products)
 
 ten_minutes_ago = Time.now - 600
 if store.since(ten_minutes_ago).any?
-  Notifier.notify_prowl("New products available!")
+  Notifier.notify("New products available!")
 end
