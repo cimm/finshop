@@ -1,20 +1,22 @@
-require "nokogiri"
+require "rexml/document"
 require "open-uri"
 
 class Crawler
+  include REXML
+
   BASE_URL = "https://finshop.belgium.be"
 
   def self.search(keyword)
-    result_page = Nokogiri::HTML(open(result_url(keyword)))
-    result_elements = result_page.css(".views-field-title")
-    result_elements.inject([]) do |memo, element|
-      url = detail_url(element)
-      detail_page = Nokogiri::HTML(open(url))
+    result_page = fetch_result_page(keyword)
+    result_nodes = result_page.get_elements("//*[contains(@class, 'views-field-title')]/span/a")
+    result_nodes.inject([]) do |memo, node|
+      url = detail_url(node)
+      details = fetch_detail_page(url)
       memo << {
-        title: element.text.strip,
+        title: child_text(node),
         url: url,
-        price: price(detail_page),
-        available: available?(detail_page)
+        price: details[:price],
+        available: details[:available]
       }
     end
   end
@@ -23,16 +25,38 @@ class Crawler
     BASE_URL + "/nl/search?search_api_views_fulltext=" + keyword
   end
 
-  def self.detail_url(result_element)
-    BASE_URL + result_element.search("a").first.attributes["href"].value
+  def self.detail_url(result_node)
+    BASE_URL + result_node.attributes["href"]
   end
 
-  def self.price(detail_page)
-    detail_page.css(".cart .price").text.to_f
+  def self.fetch_result_page(keyword)
+    body = ""
+    open(result_url(keyword)) do |f|
+      f.each_line.with_index do |line, index|
+        next unless index.between?(76, 369)
+        next if line.strip.start_with?("<img")
+        body += line
+      end
+    end
+    Document.new(body + "</body>")
   end
 
-  def self.available?(detail_page)
-    button = detail_page.css("#edit-submit").first
-    button.attributes["disabled"]&.value&.downcase != "disabled"
+  def self.fetch_detail_page(url)
+    details = {}
+    open(url) do |f|
+      f.each_line.with_index do |line, index|
+        line = line.strip
+        if line.start_with?('<h1 class="price">')
+          details[:price] = child_text(Document.new(line)).to_f
+        elsif line.start_with?("<input") && line.include?("edit-submit")
+          details[:available] = line.include?("Niet meer beschikbaar")
+        end
+      end
+    end
+    details
+  end
+
+  def self.child_text(node)
+    XPath.match(node, ".//text()").join.strip
   end
 end
