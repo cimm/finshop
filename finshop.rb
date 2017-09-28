@@ -5,7 +5,8 @@ require "./product"
 require "./store"
 require "./notifier"
 
-keyword  = ARGV.first
+keyword = ARGV.first
+
 results  = Crawler.search(keyword)
 products = Product.from_results(results)
 store    = Store.new
