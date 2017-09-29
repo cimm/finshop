@@ -8,25 +8,24 @@ class Store
   end
 
   def load
-    @store.transaction do
+    @store.transaction(read_only: true) do
       @store.fetch(:data, [])
     end
   end
 
   def upsert(records)
-    stored_records = load
-    stored_records.each do |stored_record|
-      records.each do |record|
-        stored_records.delete(stored_record) if record.equal?(stored_record)
+    db_records = load
+    records.each do |record|
+      if exists?(record)
+        db_records.delete_if { |r| r.equal?(record) }
       end
     end
-    commit(stored_records + records)
+    commit(db_records + records)
   end
 
   def commit(records)
     @store.transaction do
       @store[:data] = records
-      @store.commit
     end
   end
 
@@ -34,5 +33,15 @@ class Store
     load.select do |record|
       record.updated_at > time
     end
+  end
+
+  def find(record)
+    load.select do |db_record|
+      db_record.equal?(record)
+    end
+  end
+
+  def exists?(record)
+    find(record).any?
   end
 end
