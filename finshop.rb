@@ -12,5 +12,8 @@ products = Product.from_results(results)
 store    = Store.new
 store.upsert(products)
 
-available_products = store.load.select(&:available?)
-Notifier.new(available_products).notify(:prowl)
+new_products = store.load.select do |product|
+  product.available? && product.new?
+end
+
+Notifier.new(new_products).notify(:prowl)

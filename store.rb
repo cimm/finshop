@@ -17,10 +17,13 @@ class Store
     db_records = load
     records.each do |record|
       if exists?(record)
-        db_records.delete_if { |r| r.equal?(record) }
+        i = db_records.index { |r| r.equal?(record) }
+        db_records[i] = db_records[i].update(record)
+      else
+        db_records << record
       end
     end
-    commit(db_records + records)
+    commit(db_records)
   end
 
   def commit(records)

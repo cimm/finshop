@@ -1,5 +1,5 @@
 class Product
-  attr_writer :available
+  attr_writer :available, :new
   attr_reader :updated_at
   attr_accessor :title, :url, :price
 
@@ -8,7 +8,8 @@ class Product
     @price      = price
     @url        = url
     @available  = available
-    @updated_at = Time.now
+    @new        = true
+    @updated_at = Time.now.round
   end
 
   def self.from_results(results)
@@ -24,6 +25,10 @@ class Product
     @available
   end
 
+  def new?
+    @new
+  end
+
   def formatted_price
     "€%.2f" % price
   end
@@ -31,5 +36,13 @@ class Product
   def equal?(product)
     return false if product.url.empty?
     url.downcase == product.url.downcase
+  end
+
+  def update(product)
+    self.title     = product.title
+    self.price     = product.price
+    self.available = product.available?
+    self.new       = false
+    self
   end
 end
