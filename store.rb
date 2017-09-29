@@ -29,12 +29,6 @@ class Store
     end
   end
 
-  def since(time)
-    load.select do |record|
-      record.updated_at > time
-    end
-  end
-
   def find(record)
     load.select do |db_record|
       db_record.equal?(record)

@@ -12,6 +12,5 @@ products = Product.from_results(results)
 store    = Store.new
 store.upsert(products)
 
-ten_minutes_ago = Time.now - 600
-recent_products = store.since(ten_minutes_ago)
-Notifier.new(recent_products).notify(:prowl)
+available_products = store.load.select(&:available?)
+Notifier.new(available_products).notify(:prowl)
