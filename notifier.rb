@@ -6,23 +6,20 @@ class Notifier
   PROWL_URL         = URI("https://api.prowlapp.com/publicapi/add")
   PROWL_KEY         = ENV["PROWL_KEY"]
 
-  def initialize(records)
-    @records = records
+  def initialize(products)
+    @products = products
   end
 
   def notify(channel = :stdout)
-    return if @records.empty?
-
-    message = "New products found:\n"
-    message += @records.map(&:title).join("\n")
+    return if @products.empty?
 
     case channel
-      when :prowl then notify_prowl(message)
-      else notify_stdout(message)
+      when :prowl then notify_prowl
+      else notify_stdout
     end
   end
 
-  def notify_prowl(message)
+  def notify_prowl
     raise MissingKeyError unless PROWL_KEY
     Net::HTTP.post_form(PROWL_URL,
                         apikey: PROWL_KEY,
@@ -30,11 +27,18 @@ class Notifier
                         description: message)
   rescue MissingKeyError
     puts "Missing PROWL_KEY, falling back to stdout."
-    notify_stdout(message)
+    notify_stdout
   end
 
-  def notify_stdout(message)
+  def notify_stdout
     puts message
+  end
+
+  def message
+    message = "New products found:\n"
+    @products.inject(message) do |memo, product|
+      memo += "#{product.title} (€#{product.price})\n"
+    end
   end
 end
 
