@@ -6,10 +6,11 @@ require "./store"
 require "./notifier"
 
 keyword = ARGV.first
+raise ArgumentError, "missing search keyword" unless keyword
 
 results  = Crawler.search(keyword)
 products = Product.from_results(results)
-store    = Store.new
+store    = Store.new(keyword)
 store.upsert(products)
 
 new_products = store.load.select do |product|

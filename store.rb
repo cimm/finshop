@@ -1,10 +1,8 @@
 require "yaml/store"
 
 class Store
-  DATA_FILE = "data.yml"
-
-  def initialize
-    @store = YAML::Store.new(DATA_FILE)
+  def initialize(data_file)
+    @store = YAML::Store.new(data_file+".yml")
   end
 
   def load
