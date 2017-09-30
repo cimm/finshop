@@ -11,17 +11,17 @@ class Store
     end
   end
 
-  def upsert(records)
-    db_records = load
-    records.each do |record|
-      if exists?(record)
-        i = db_records.index { |r| r.equal?(record) }
-        db_records[i] = db_records[i].update(record)
+  def upsert(new_records)
+    records = load
+    new_records.each do |new_record|
+      if exists?(new_record)
+        i = records.index { |r| r.equal?(new_record) }
+        records[i] = records[i].update(new_record)
       else
-        db_records << record
+        records << new_record
       end
     end
-    commit(db_records)
+    commit(records)
   end
 
   def commit(records)
