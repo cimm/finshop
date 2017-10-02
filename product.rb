@@ -39,10 +39,11 @@ class Product
   end
 
   def update(product)
-    self.title     = product.title
-    self.price     = product.price
-    self.available = product.available?
-    self.new       = false
+    @title      = product.title
+    @price      = product.price
+    @available  = product.available?
+    @new        = false
+    @updated_at = Time.now.round
     self
   end
 end
