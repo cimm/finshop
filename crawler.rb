@@ -9,8 +9,8 @@ class Crawler
   attr_reader :data
 
   def self.search(keyword)
-    require "./results_crawler"
-    require "./detail_crawler"
+    require_relative "./results_crawler"
+    require_relative "./detail_crawler"
 
     results_crawler = ResultsCrawler.new(keyword)
     results_crawler.fetch_and_parse

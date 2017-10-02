@@ -1,4 +1,4 @@
-require "./crawler"
+require_relative "./crawler"
 
 class ResultsCrawler < Crawler
   def initialize(keyword)

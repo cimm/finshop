@@ -1,6 +1,5 @@
 require "net/https"
 
-
 class Notifier
   PROWL_APPLICATION = "FinShop"
   PROWL_URL         = URI("https://api.prowlapp.com/publicapi/add")

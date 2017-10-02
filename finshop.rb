@@ -1,9 +1,9 @@
 #!/usr/bin/env ruby
 
-require "./crawler"
-require "./product"
-require "./store"
-require "./notifier"
+require_relative "./crawler"
+require_relative "./product"
+require_relative "./store"
+require_relative "./notifier"
 
 keyword = ARGV.first
 raise ArgumentError, "missing search keyword" unless keyword
