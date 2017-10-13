@@ -18,7 +18,9 @@ Search for all products with `keyword` and send a push notification via Prowl:
 $ PROWL_KEY=abc123 ruby finshop.rb keyword
 ```
 
-The database will be stored in the same directory in a file named `keyword.yml`.
+The database will be stored in the same directory in a file named `keyword.yml`. It will create a database file per search keyword so you can watch different product searches as well.
+
+I run this in a weekly crontab watching out for toys my kids might be interested in.
 
 ## Why
 
